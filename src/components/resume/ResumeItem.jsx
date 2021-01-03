@@ -1,5 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import DOMPurify from 'dompurify';
 
 import Arrow from '../../assets/arrow-right.svg';
 
@@ -9,11 +11,11 @@ const ResumeItem = props => {
     <Column>
       <Row>
         <h1>{item.title}</h1>
-        <p>{item.subtitle}</p>
+        <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.subtitle) }} />
 
-        <a href={item.url} target="_blank" rel="noreferrer">
+        <Link to={`post/${item.slug}/${item.id}`}>
           Read Case study <img src={Arrow} />
-        </a>
+        </Link>
       </Row>
       <Row>
         <img src={item.img} alt="case-study" />

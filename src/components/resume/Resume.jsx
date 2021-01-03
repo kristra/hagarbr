@@ -1,32 +1,36 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 import Layout from '../common/Layout';
 import ResumeItem from './ResumeItem';
 
 import WelcomeImage from '../../assets/welcome.svg';
-import Bread from '../../assets/bread-dribbble.png';
-import ImageProcessing from '../../assets/image-processing.png';
 
 const Resume = () => {
-  const items = [
-    {
-      title: 'Redesign eDOT eCommerce',
-      subtitle: 'Enhancing better shopping activity experience in eDOT app.',
-      img: Bread,
-      url: ''
-    },
-    {
-      title: 'Redesign eDOT eCommerce',
-      subtitle: 'Enhancing better shopping activity experience in eDOT app.',
-      img: ImageProcessing,
-      url: ''
-    }
-  ];
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const response = await fetch(process.env.REACT_APP_API_URL);
+      const json = await response.json();
+
+      setPosts(
+        json.map(post => ({
+          id: post.id,
+          title: post.title.rendered,
+          subtitle: post.excerpt.rendered,
+          img: post.jetpack_featured_media_url,
+          slug: post.slug
+        }))
+      );
+    };
+
+    fetchPosts();
+  }, []);
 
   const ResumeItems = useMemo(() => {
-    return items.map((item, index) => <ResumeItem key={`resume-item-${index}`} item={item}></ResumeItem>);
-  }, [items]);
+    return posts.map((item, index) => <ResumeItem key={`resume-item-${index}`} item={item}></ResumeItem>);
+  }, [posts]);
 
   return (
     <Root>
