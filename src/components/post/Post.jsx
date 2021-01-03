@@ -12,7 +12,7 @@ const Post = () => {
 
   useEffect(() => {
     const fetchPost = async () => {
-      const response = await fetch(REACT_APP_API_URL + params.id);
+      const response = await fetch(process.env.REACT_APP_API_URL + params.id);
       const json = await response.json();
 
       setPost({
